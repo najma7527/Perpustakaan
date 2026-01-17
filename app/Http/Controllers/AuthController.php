@@ -61,7 +61,7 @@ class AuthController extends Controller
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'kelas' => $data['kelas'] ?? null,
-            'role' => $data['role'],
+            'role' => 'anggota',
         ]);
 
         Auth::login($user);
