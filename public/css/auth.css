@@ -216,3 +216,76 @@ button {
     font-size: 13px;
   }
 }
+
+/* kode berhasil register anggota */
+.register-anggota {
+  width: 1440px;
+  height: 1024px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.register-anggota .hourglass-dynamic {
+  margin-left: 625px;
+  width: 189px;
+  height: 189px;
+  margin-top: 204px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.register-anggota .text-wrapper {
+  margin-left: 400px;
+  width: 723px;
+  height: 82px;
+  margin-top: 29px;
+  font-family: "Nunito Sans-Bold", Helvetica;
+  font-weight: 700;
+  color: #209eeb;
+  font-size: 64px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.register-anggota .div {
+  margin-left: 420px;
+  width: 583px;
+  height: 53px;
+  font-family: "Nunito Sans-Bold", Helvetica;
+  font-weight: 700;
+  color: #209eeb;
+  font-size: 32px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.register-anggota .login {
+  margin-left: 608px;
+  width: 206px;
+  height: 40px;
+  position: relative;
+  margin-top: 41px;
+  background-color: #209eeb;
+  border-radius: 9px;
+}
+
+.register-anggota .masuk {
+  position: absolute;
+  width: 21.36%;
+  height: 67.50%;
+  top: 17.50%;
+  left: 39.00%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nunito Sans-Medium", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}

@@ -14,6 +14,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/succes', function () {
+    return view('auth.succes_register');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
@@ -22,12 +26,12 @@ Route::get('/', function () {
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register.show');
-//untuk registrasi anggota baru
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/register-anggota', [AuthController::class, 'showRegisterAnggota'])->name('registerAnggota.show');
+Route::post('/register-anggota', [AuthController::class, 'registerAnggota'])->name('registerAnggota');
+Route::get('/register-admin', [AuthController::class, 'showRegisterAdmin'])->name('register-admin.show');
+Route::post('/register-admin', [AuthController::class, 'registerAdmin'])->name('register-admin');
 
 /*
 |--------------------------------------------------------------------------
