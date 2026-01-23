@@ -246,4 +246,7 @@ Route::middleware('auth')->group(function () {
     // Filter kunjungan berdasarkan tanggal
     Route::get('/visits/date/search', [VisitController::class, 'getByDate'])->name('visits.by-date');
 });
+    Route::get('/fitur', function () {
+    return view('admin.kelola_data_buku');
+});
 
