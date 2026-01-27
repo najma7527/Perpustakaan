@@ -18,6 +18,18 @@ Route::get('/succes', function () {
     return view('auth.succes_register');
 });
 
+Route::get('/kelola_data_buku', function () {
+    return view('admin.kelola_data_buku');
+});
+
+Route::get('/kelola_anggota', function () {
+    return view('admin.kelola_data_anggota');
+});
+
+
+Route::get('/daftar_pengunjung', function () {
+    return view('admin.daftar_pengunjung');
+});
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
@@ -252,5 +264,8 @@ Route::middleware('auth')->group(function () {
     
     // Filter kunjungan berdasarkan tanggal
     Route::get('/visits/date/search', [VisitController::class, 'getByDate'])->name('visits.by-date');
+});
+    Route::get('/fitur', function () {
+    return view('admin.kelola_data_buku');
 });
 
