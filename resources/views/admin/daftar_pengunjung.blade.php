@@ -38,8 +38,8 @@
             </a>
         </li>
 
-        <li class="{{ request()->is('laporan_kehilangan*') ? '' : '' }}">
-            <a href="/laporan_kehilangan">
+        <li class="{{ request()->is('laporan_data_kehilangan*') ? '' : '' }}">
+            <a href="/laporan_data_kehilangan">
                 <i class="fa fa-file"></i> Laporan Kehilangan
             </a>
         </li>
