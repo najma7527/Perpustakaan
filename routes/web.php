@@ -23,13 +23,35 @@ Route::get('/kelola_data_buku', function () {
 });
 
 Route::get('/kelola_anggota', function () {
-    return view('admin.kelola_data_anggota');
+    return view('admin.kelola_data_anggota-verifikasi');
 });
 
 
 Route::get('/daftar_pengunjung', function () {
     return view('admin.daftar_pengunjung');
 });
+
+
+Route::get('/kelola_anggota-diterima', function () {
+    return view('admin.kelola_data_anggota-diterima');
+});
+
+Route::get('/kelola_anggota-verifikasi', function () {
+    return view('admin.kelola_data_anggota-verifikasi');
+});
+
+
+Route::get('/kelola_anggota-ditolak', function () {
+    return view('admin.kelola_data_anggota-ditolak');
+});
+
+
+Route::get('/laporan_data_kehilangan', function () {
+    return view('admin.laporan_data_kehilangan');
+});
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
