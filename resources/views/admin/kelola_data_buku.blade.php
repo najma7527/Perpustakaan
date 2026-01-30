@@ -121,15 +121,6 @@
                             <button class="btn edit">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
-<<<<<<< HEAD
-                            <button class="btn delete">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                            @endauth
-                            <button class="btn view">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-=======
       <button class="btn delete" onclick="openModal(this)" data-id="{{ $i }}">
     <i class="fa-solid fa-trash"></i>
 </button>
@@ -187,7 +178,6 @@
 </div>
 
 
->>>>>>> 521a843a3e13398f7fdf1d23270899d3bed8a06b
                         </td>
                     </tr>
                     @endfor
