@@ -108,6 +108,7 @@
 
                 <tbody>
                     @for ($i = 1; $i <= 10; $i++)
+                    @if (Auth::user()->role == 'admin')
                     <tr>
                         <td>{{ $i }}</td>
                         <td>Afian tombal ban</td>
@@ -124,6 +125,7 @@
       <button class="btn delete" onclick="openModal(this)" data-id="{{ $i }}">
     <i class="fa-solid fa-trash"></i>
 </button>
+                            @endauth    
 <!-- ================= MODAL HAPUS ================= -->
 <div class="modal-overlay" id="modalHapus">
     <div class="modal-box">
@@ -180,6 +182,7 @@
 
                         </td>
                     </tr>
+                    @endif
                     @endfor
                 </tbody>
             </table>
