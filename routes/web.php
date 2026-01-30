@@ -10,9 +10,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('landing');
-});
+Route::get('/', fn () => redirect()->route('login.show'));
+
 
 Route::get('/succes', function () {
     return view('auth.succes_register');
@@ -20,7 +19,7 @@ Route::get('/succes', function () {
 
 Route::get('/kelola_data_buku', function () {
     return view('admin.kelola_data_buku');
-});
+})->middleware('auth');
 
 Route::get('/kelola_anggota', function () {
     return view('admin.kelola_data_anggota');
