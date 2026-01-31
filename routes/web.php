@@ -10,9 +10,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn () => redirect()->route('login.show'));
+
 
 Route::get('/succes', function () {
     return view('auth.succes_register');
@@ -20,15 +19,34 @@ Route::get('/succes', function () {
 
 Route::get('/kelola_data_buku', function () {
     return view('admin.kelola_data_buku');
-});
+})->middleware('auth');
 
 Route::get('/kelola_anggota', function () {
-    return view('admin.kelola_data_anggota');
+    return view('admin.kelola_data_anggota-verifikasi');
 });
 
 
 Route::get('/daftar_pengunjung', function () {
     return view('admin.daftar_pengunjung');
+});
+
+
+Route::get('/kelola_anggota-diterima', function () {
+    return view('admin.kelola_data_anggota-diterima');
+});
+
+Route::get('/kelola_anggota-verifikasi', function () {
+    return view('admin.kelola_data_anggota-verifikasi');
+});
+
+
+Route::get('/kelola_anggota-ditolak', function () {
+    return view('admin.kelola_data_anggota-ditolak');
+});
+
+
+Route::get('/laporan_data_kehilangan', function () {
+    return view('admin.laporan_data_kehilangan');
 });
 
 /*
@@ -265,6 +283,12 @@ Route::middleware('auth')->group(function () {
     
     // Filter kunjungan berdasarkan tanggal
     Route::get('/visits/date/search', [VisitController::class, 'getByDate'])->name('visits.by-date');
+
+    // Check-in kunjungan untuk anggota
+    Route::post('/check-in', [VisitController::class, 'checkIn'])->name('visit.check-in');
+
+    // Riwayat kunjungan dan transaksi untuk anggota
+    Route::get('/my-visits-history', [VisitController::class, 'history'])->name('visit.history');
 });
     Route::get('/fitur', function () {
     return view('admin.kelola_data_buku');

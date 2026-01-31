@@ -256,3 +256,128 @@ tbody tr {
         padding: 10px;
     }
 }
+
+/* ================= MODAL HAPUS ================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-box {
+    background: #fff;
+    width: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fade .3s ease;
+}
+
+.modal-header {
+    background: #2196f3;
+    color: #fff;
+    padding: 14px;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 30px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+.btn-modal {
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-modal.batal {
+    background: #e53935;
+}
+
+.btn-modal.yakin {
+    background: #1e88e5;
+}
+
+@keyframes fade {
+    from {
+        transform: scale(.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ================= MODAL DETAIL ================= */
+.modal-detail-box {
+    background: #fff;
+    width: 800px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fade .3s ease;
+}
+
+.modal-detail-body {
+    display: flex;
+    gap: 25px;
+    padding: 25px;
+}
+
+.modal-detail-body img {
+    width: 220px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+.detail-text h2 {
+    margin-bottom: 6px;
+}
+
+.penulis {
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.badge {
+    background: #2196f3;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.deskripsi {
+    line-height: 1.6;
+    color: #333;
+}
+
+.modal-footer-detail {
+    padding: 15px;
+    text-align: right;
+}
+
+.btn-tutup {
+    background: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
