@@ -30,6 +30,7 @@ Route::get('/kelola_anggota', function () {
 Route::get('/daftar_pengunjung', function () {
     return view('admin.daftar_pengunjung');
 });
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes

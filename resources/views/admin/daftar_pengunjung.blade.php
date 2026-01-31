@@ -27,7 +27,7 @@
         </li>
 
         <li class="{{ request()->is('transaksi*') ? '' : '' }}">
-            <a href="/transaksi">
+            <a href="/transactions">
                 <i class="fa fa-right-left"></i> Transaksi
             </a>
         </li>

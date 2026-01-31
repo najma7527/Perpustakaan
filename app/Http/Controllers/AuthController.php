@@ -35,7 +35,7 @@ class AuthController extends Controller
                 $request->session()->regenerate();
 
                 $intended = Auth::user()->role === 'admin'
-                    ? route('admin.dashboard')
+                    ? route('transactions.index')
                     : route('anggota.dashboard');
 
                 return redirect()->intended($intended);
