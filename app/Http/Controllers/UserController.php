@@ -58,7 +58,7 @@ class UserController extends Controller
 
         $users = $query->latest()->paginate(10);
 
-    return view('admin.anggota.index', compact('users', 'tab', 'search', 'kelas', 'date'
+    return view('admin.kelola_data_anggota', compact('users', 'tab', 'search', 'kelas', 'date'
 ));
 
     }

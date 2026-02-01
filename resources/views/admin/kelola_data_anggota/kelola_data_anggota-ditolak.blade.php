@@ -1,41 +1,23 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Anggota - Diterima</title>
+@extends('layouts.app')
 
-    <link rel="stylesheet" href="{{ asset('css/kelola-anggota-diterima.css') }}">
+@section('title', 'Kelola Anggota - Ditolak')
+
+@push('styles')
+   <link rel="stylesheet" href="{{ asset('css/kelola-anggota-ditolak.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-</head>
-<body>
+@endpush
 
-<div class="wrapper">
+@section('content')
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="{{ asset('img/logo.png') }}">
-        </div>
-
-        <ul class="menu">
-            <li><a href="/kelola_data_buku"><i class="fa fa-book"></i> Kelola Data Buku</a></li>
-            <li class="active"><a href="/kelola_anggota"><i class="fa fa-users"></i> Kelola Anggota</a></li>
-            <li><a href="/transaksi"><i class="fa fa-right-left"></i> Transaksi</a></li>
-            <li><a href="/daftar_pengunjung"><i class="fa fa-list"></i> Daftar Pengunjung</a></li>
-            <li><a href="/laporan_data_kehilangan"><i class="fa fa-file"></i> Laporan Kehilangan</a></li>
-        </ul>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main-content">
 
         <!-- TOPBAR -->
         <header class="topbar">
             <i class="fa fa-bars"></i>
             <div class="user">
-                <span>Seulgi</span>
-                <small>Admin</small>
+                <div>
+                    <strong>Seulgi</strong><br>
+                    <small>Admin</small>
+                </div>
                 <img src="{{ asset('images/avatar.png') }}">
             </div>
         </header>
@@ -43,25 +25,25 @@
         <!-- CONTENT -->
         <section class="content">
 
-            <!-- HEADER CARD -->
+            <!-- HEADER -->
             <div class="header-card">
                 <div class="header-left">
                     <div class="header-icon">
-                        <i class="fa fa-user-check"></i>
+                        <i class="fa fa-users"></i>
                     </div>
                     <div>
                         <h3>Kelola Anggota</h3>
-                        <p>Daftar anggota yang telah diterima</p>
+                        <p>Mencatat data pengunjung perpustakaan</p>
                     </div>
                 </div>
-                <img src="{{ asset('img/book.png') }}">
+                <img src="{{ asset('img/book.png') }}" class="header-img">
             </div>
 
             <!-- TAB -->
             <div class="tab-wrapper">
                 <a href="/kelola_anggota-verifikasi" class="tab-item">Verifikasi</a>
-                <a href="/kelola_anggota-diterima" class="tab-item active">Diterima</a>
-                <a href="/kelola_anggota-ditolak" class="tab-item">Ditolak</a>
+                <a href="/kelola_anggota-diterima" class="tab-item">Diterima</a>
+                <a href="/kelola_anggota-ditolak" class="tab-item active">Ditolak</a>
             </div>
 
             <!-- TABLE -->
@@ -70,7 +52,7 @@
                 <div class="filter">
                     <div class="search">
                         <i class="fa fa-search"></i>
-                        <input type="text" placeholder="Cari anggota...">
+                        <input type="text" placeholder="Cari sesuatu...">
                     </div>
                     <div class="date">
                         <i class="fa fa-calendar"></i>
@@ -87,7 +69,6 @@
                                 <th>NIS</th>
                                 <th>NISN</th>
                                 <th>Kelas</th>
-                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -97,7 +78,7 @@
                         <tr>
                             <td>{{ $i }}</td>
 
-                            <!-- USER CELL (TIDAK DIUBAH STRUKTURNYA) -->
+                            <!-- USER CELL -->
                             <td class="user-cell">
                                 <img src="{{ asset('images/avatar.png') }}" class="avatar">
                                 <div class="user-info">
@@ -106,15 +87,13 @@
                                 </div>
                             </td>
 
-                            <td>6550{{ $i }}</td>
-                            <td>00223344{{ $i }}</td>
-                            <td>X RPL</td>
-                            <td><span class="status aktif">Diterima</span></td>
+                            <td>6550/147.089</td>
+                            <td>0087074225</td>
+                            <td>X RPL {{ $i }}</td>
 
                             <td class="aksi">
-                                <button class="edit"><i class="fa fa-pen"></i></button>
-                                <button class="view"><i class="fa fa-eye"></i></button>
-                                <button class="delete"><i class="fa fa-trash"></i></button>
+                                <button class="btn-accept"><i class="fa fa-check"></i></button>
+                                <button class="btn-reject"><i class="fa fa-times"></i></button>
                             </td>
                         </tr>
                         @endfor
@@ -124,8 +103,4 @@
 
             </div>
         </section>
-    </main>
-</div>
-
-</body>
-</html>
+@endsection

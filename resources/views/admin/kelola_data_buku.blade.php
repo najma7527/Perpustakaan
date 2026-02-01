@@ -1,70 +1,14 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Kelola Data Buku</title>
 
-    {{-- CSS --}}
+@extends('layouts.app')
+
+@section('title', 'Dashboard Anggota')
+
+@push('styles')
     <link rel="stylesheet" href="{{ asset('css/kelola_data_buku.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
+@endpush
 
-<div class="layout">
-
- 
-    <!-- SIDEBAR -->
-<aside class="sidebar">
-    <div class="logo">
-        <img src="{{ asset('img/logo.png') }}" alt="Logo">
-    </div>
-
-    <ul class="menu">
-        <li class="{{ request()->is('kelola_data_buku*') ? '' : '' }}">
-            <a href="/kelola_data_buku">
-                <i class="fa fa-book"></i> Kelola Data Buku
-            </a>
-        </li>
-
-        <li class="{{ request()->is('kelola_anggota*') ? '' : '' }}">
-            <a href="/kelola_anggota">
-                <i class="fa fa-users"></i> Kelola Anggota
-            </a>
-        </li>
-
-        <li class="{{ request()->is('transaksi*') ? '' : '' }}">
-            <a href="/transaksi">
-                <i class="fa fa-right-left"></i> Transaksi
-            </a>
-        </li>
-
-       <li class="{{ request()->is('daftar_pengunjung') ? '' : '' }}">
-    <a href="/daftar_pengunjung">
-        <i class="fa fa-list"></i> Daftar Pengunjung
-    </a>
-</li>
-
-
-        <li class="{{ request()->is('laporan_data_kehilangan*') ? '' : '' }}">
-            <a href="/laporan_data_kehilangan">
-                <i class="fa fa-file"></i> Laporan Kehilangan
-            </a>
-        </li>
-    </ul>
-</aside>
-
-    <!-- CONTENT -->
-    <main class="content">
-
-        <!-- TOPBAR -->
-        <div class="topbar">
-            <i class="fa-solid fa-bars"></i>
-            <div class="user">
-                <span>Seulgi</span>
-                <img src="{{ asset('img/user.png') }}" alt="User">
-            </div>
-        </div>
-
+@section('content')
         <!-- HEADER CARD -->
         <div class="header-card">
             <div>
@@ -241,5 +185,4 @@
     });
 </script>
 
-
-</html>
+@endsection
