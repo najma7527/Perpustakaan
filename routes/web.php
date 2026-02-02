@@ -19,6 +19,16 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->name('dashboard.admin')->middleware('auth');
 
+Route::get('/pinjam-buku', function () {
+    return view('siswa.pinjam-buku');
+});
+
+
+Route::get('/pengembalian-buku', function () {
+    return view('siswa.pengembalian-buku');
+});
+
+
 // ANGGOTA
 Route::get('/dashboard-anggota', function () {
     return view('siswa.dashboard');
