@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('layouts.app')
 
 @section('title', 'Kelola Anggota - ' . ucfirst($tab))

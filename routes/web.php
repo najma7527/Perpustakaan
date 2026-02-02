@@ -10,9 +10,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('landing');
-});
+Route::get('/', fn () => redirect()->route('login.show'));
+
 
 // ADMIN
 Route::get('/dashboard', function () {
@@ -23,8 +22,6 @@ Route::get('/dashboard', function () {
 Route::get('/dashboard-anggota', function () {
     return view('anggota.dashboard');
 })->name('dashboard.anggota')->middleware('auth');
-
-
 
 /*
 |--------------------------------------------------------------------------

@@ -27,14 +27,14 @@
             @guest
                 {{-- BELUM LOGIN --}}
                 <a
-                    href="{{ route('login') }}"
+                    href="{{ route('login.show') }}"
                     class="inline-block px-5 py-1.5 text-[#1b1b18] dark:text-[#EDEDEC]
                            border border-transparent hover:border-[#19140035]
                            dark:hover:border-[#3E3E3A] rounded-sm text-sm">
                     Log in
                 </a>
 
-                @if (Route::has('register-admin'))
+                @if (Route::has('register-admin.show'))
                     <a
                         href="{{ route('register-admin') }}"
                         class="inline-block px-5 py-1.5 text-[#1b1b18] dark:text-[#EDEDEC]
@@ -45,9 +45,9 @@
                     </a>
                 @endif
 
-                @if (Route::has('register-anggota'))
+                @if (Route::has('register-anggota.show'))
                     <a
-                        href="{{ route('register-anggota') }}"
+                        href="{{ route('register-anggota.show') }}"
                         class="inline-block px-5 py-1.5 text-[#1b1b18] dark:text-[#EDEDEC]
                                border border-[#19140035] hover:border-[#1915014a]
                                dark:border-[#3E3E3A] dark:hover:border-[#62605b]

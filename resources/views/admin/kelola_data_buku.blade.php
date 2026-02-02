@@ -26,13 +26,14 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Cari sesuatu...">
                 </div>
-
+                @auth
                 <button class="btn-add">
                     <i class="fa-solid fa-plus"></i>
                     Tambah Data Buku
                 </button>
+                @endauth
             </div>
-
+            
             <table>
                 <thead>
                     <tr>
@@ -49,6 +50,7 @@
 
                 <tbody>
                     @for ($i = 1; $i <= 10; $i++)
+                    @if (Auth::user()->role == 'admin')
                     <tr>
                         <td>{{ $i }}</td>
                         <td>Afian tombal ban</td>
@@ -58,12 +60,14 @@
                         <td>{{ $i % 2 == 0 ? 'Fiksi' : 'Non Fiksi' }}</td>
                         <td>{{ rand(1,8) }}</td>
                         <td class="aksi">
+                            @auth
                             <button class="btn edit">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
       <button class="btn delete" onclick="openModal(this)" data-id="{{ $i }}">
     <i class="fa-solid fa-trash"></i>
 </button>
+                            @endauth    
 <!-- ================= MODAL HAPUS ================= -->
 <div class="modal-overlay" id="modalHapus">
     <div class="modal-box">
@@ -120,6 +124,7 @@
 
                         </td>
                     </tr>
+                    @endif
                     @endfor
                 </tbody>
             </table>
