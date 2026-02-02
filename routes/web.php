@@ -51,6 +51,16 @@ Route::get('/laporan_data_kehilangan', function () {
 });
 
 
+Route::get('/pinjam-buku', function () {
+    return view('siswa.pinjam-buku');
+});
+
+
+Route::get('/pengembalian-buku', function () {
+    return view('siswa.pengembalian-buku');
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
