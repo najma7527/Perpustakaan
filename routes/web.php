@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
 
 // ANGGOTA
 Route::get('/dashboard-anggota', function () {
-    return view('anggota.dashboard');
+    return view('siswa.dashboard');
 })->name('dashboard.anggota')->middleware('auth');
 
 /*
