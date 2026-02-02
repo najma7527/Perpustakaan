@@ -35,8 +35,8 @@ class AuthController extends Controller
                 $request->session()->regenerate();
 
                 $intended = Auth::user()->role === 'admin'
-                    ? route('admin.dashboard')
-                    : route('anggota.dashboard');
+                    ? route('dashboard.admin')
+                    : route('dashboard.anggota');
 
                 return redirect()->intended($intended);
             }
@@ -109,7 +109,7 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
             'kelas' => $data['kelas'],
             'role' => 'anggota',
-            'status' => 'nonaktif',
+            'status' => 'menunggu',
         ]);
 
         $remember = $data['remember'] ?? false;

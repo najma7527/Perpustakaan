@@ -13,124 +13,137 @@ class UserController extends Controller
     {
         $this->middleware('auth');
     }
-
-    public function index() 
+    /**
+     * Menampilkan daftar anggota dengan filter Search, Tanggal, Kelas, dan Status
+     */
+    public function index(Request $request)
     {
-        // only admin can list users
         if (Auth::user()?->role !== 'admin') abort(403);
-        $users = User::where('role','anggota')->get();
-        return view('admin.kelola-anggota.index',compact('users'));
+
+        // Ambil filter dari request
+        $search = $request->get('search');
+        $date = $request->get('date');
+        $kelas = $request->get('kelas');
+        $tab = $request->get('tab', 'verifikasi'); // Default tab ke verifikasi
+
+        $query = User::where('role', 'anggota');
+
+        // Logic Filter Tab
+if ($tab == 'verifikasi') {
+    $query->where('status', 'menunggu');
+
+} elseif ($tab == 'diterima') {
+    $query->whereIn('status', ['aktif', 'nonaktif']);
+
+} elseif ($tab == 'ditolak') {
+    $query->where('status', 'ditolak');
+}
+
+
+        // Search: Nama, Username, NIS/NISN
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('nis_nisn', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter Tanggal (berdasarkan created_at)
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // Filter Kelas
+        if ($kelas) {
+            $query->where('kelas', $kelas);
+        }
+
+        $users = $query->latest()->paginate(10);
+
+    return view('admin.kelola_data_anggota', compact('users', 'tab', 'search', 'kelas', 'date'
+));
+
     }
 
-    public function create()
+    /**
+     * Mengubah status (Aksi Centang/Diterima & Silang/Ditolak)
+     */
+    public function updateStatus(Request $request, $id)
     {
         if (Auth::user()?->role !== 'admin') abort(403);
-        return view('admin.kelola-anggota.create');
-    }
-
-    public function store(Request $request)
-    {
-        if (Auth::user()?->role !== 'admin') abort(403);
-
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'telephone' => 'nullable|string|max:255',
-            'nis_nisn' => 'nullable|string|max:255',    
-            'password' => 'required|string|min:6|confirmed',
-            'kelas' => 'nullable|string|max:255',
-            'role' => 'required|in:anggota,admin',
+        $user = User::findOrFail($id);
+        
+        $request->validate([
+        'status' => 'required|in:aktif,nonaktif,menunggu,ditolak',
         ]);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'username' => $data['username'],
-            'telephone' => $data['telephone'] ?? null,
-            'nis_nisn' => $data['nis_nisn'] ?? null,
-            'password' => Hash::make($data['password']),
-            'kelas' => $data['kelas'] ?? null,
-            'role' => $data['role'],
-            'status' => 'aktif',
+        $user->update([
+            'status' => $request->status
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->back()->with('success', 'Status anggota berhasil diperbarui.');
     }
 
-    public function edit(User $user)
+    /**
+     * Lihat Detail Anggota
+     */
+    public function show($id)
     {
         if (Auth::user()?->role !== 'admin') abort(403);
-        if ($user->role !== 'anggota') abort(403, 'Hanya dapat mengatur user dengan role anggota');
-        return view('admin.kelola-anggota.edit', compact('user'));
+        $user = User::findOrFail($id);
+        // Mengembalikan view detail (bisa dalam bentuk modal atau halaman baru)
+        return view('admin.anggota.show', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    /**
+     * Update Status Anggota (Hanya status saja)
+     */
+    public function update(Request $request, $id)
     {
         if (Auth::user()?->role !== 'admin') abort(403);
-        if ($user->role !== 'anggota') abort(403, 'Hanya dapat mengatur user dengan role anggota');
+        $user = User::findOrFail($id);
 
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'telephone' => 'nullable|string|max:255',
-            'nis_nisn' => 'nullable|string|max:255',
-            'password' => 'nullable|string|min:6|confirmed',
-            'kelas' => 'nullable|string|max:255',
+        $request->validate([
+            'status'   => 'required|in:aktif,nonaktif,menunggu,ditolak'
         ]);
 
-        $update = [
-            'name' => $data['name'],
-            'username' => $data['username'],
-            'kelas' => $data['kelas'] ?? null,
-            'nin/nisn' => $data['nis/nisn'] ?? null,
-        ];
+        $user->update([
+            'status' => $request->status,
+        ]);
 
-        if (!empty($data['password'])) $update['password'] = Hash::make($data['password']);
-
-        $user->update($update);
-        return redirect()->back()->with('success', 'User berhasil diupdate');
+        return redirect()->back()->with('success', 'Status anggota berhasil diperbarui.');
     }
 
-    public function destroy(User $user)
+    /**
+     * Reset Password Anggota
+     */
+    public function resetPassword(Request $request, $id)
     {
         if (Auth::user()?->role !== 'admin') abort(403);
-        if ($user->role !== 'anggota') abort(403, 'Hanya dapat mengatur user dengan role anggota');
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'password' => 'required|min:6|confirmed'
+        ]);
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password anggota berhasil direset.');
+    }
+
+
+    /**
+     * Hapus Anggota
+     */
+    public function destroy($id)
+    {
+        if (Auth::user()?->role !== 'admin') abort(403);
+        $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->back()->with('success', 'User berhasil dihapus');
+
+        return redirect()->back()->with('success', 'Anggota berhasil dihapus.');
     }
-
-    public function approve($id)
-{
-    if (Auth::user()?->role !== 'admin') abort(403);
-
-    $user = User::findOrFail($id);
-
-    $user->update([
-        'status' => 'aktif'
-    ]);
-
-    return redirect()->back()->with('success', 'User berhasil diaktifkan');
-}
-
-
-   public function search(Request $request)
-{
-    if (Auth::user()->role !== 'admin') abort(403);
-
-    $q = $request->q;
-
-    $query = User::where('role', 'anggota');
-
-    if ($q) {
-        $query->where(function ($q2) use ($q) {
-            $q2->where('name', 'like', "%$q%")
-               ->orWhere('username', 'like', "%$q%")
-               ->orWhere('nis_nisn', 'like', "%$q%");
-        });
-    }
-
-    return response()->json([
-        'data' => $query->limit(20)->get()
-    ]);
-}
-
 }

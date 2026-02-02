@@ -12,12 +12,15 @@ class Book extends Model
     protected $table = 'books';
 
     protected $fillable = [
+        'kode_buku',
         'judul',
         'pengarang',
         'tahun_terbit',
         'kategori_buku',
-        'stok_buku',
         'id_baris',
+        'cover',
+        'deskripsi',
+        'status',
     ];
 
     public function row()

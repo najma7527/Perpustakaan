@@ -16,16 +16,20 @@ class TransactionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        if (Auth::user()?->role === 'admin') {
-            $transactions = Transaction::with(['book', 'user'])->get();
-        } else {
-            $transactions = Transaction::with(['book', 'user'])->where('user_id', Auth::id())->get();
-        }
+   public function index(Request $request)
+{
+    $mode = $request->get('mode', 'peminjaman');
 
-        return response()->json(['data' => $transactions]);
+    if (Auth::user()->role === 'admin') {
+        $transactions = Transaction::with(['user','book'])->get();
+    } else {
+        $transactions = Transaction::with(['user','book'])
+            ->where('user_id', Auth::id())
+            ->get();
     }
+
+    return view('admin.transaksi', compact('transactions','mode'));
+}
 
     public function create()
     {
