@@ -29,6 +29,9 @@ Route::get('/pengembalian-buku', function () {
 });
 
 
+Route::get('/crud_kelola_buku', function () {
+    return view('admin.CRUD_kelola_buku');
+});
 // ANGGOTA
 Route::get('/dashboard-anggota', function () {
     return view('siswa.dashboard');
