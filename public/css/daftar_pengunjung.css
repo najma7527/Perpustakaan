@@ -124,18 +124,19 @@
 }
 
 table {
-    width: 1077%;
-    min-width: 900px;
+    width: 100%;
     border-collapse: collapse;
+    min-width: 900px;
 }
 
 thead {
-    background: #2196f3;
+    background: #1e88e5;
     color: #fff;
 }
 
 th, td {
     padding: 12px;
+    font-size: 14px;
     text-align: center;
 }
 

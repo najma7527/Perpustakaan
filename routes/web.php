@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', fn () => redirect()->route('login.show'));
 
@@ -55,8 +56,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::delete('/anggota/{id}', [UserController::class, 'destroy'])->name('admin.anggota.destroy');
     // Detail anggota
     Route::get('/anggota/{id}', [UserController::class, 'show'])->name('admin.anggota.show');
-    // Update anggota
+    // Update status anggota
     Route::put('/anggota/{id}', [UserController::class, 'update'])->name('admin.anggota.update');
+    // Reset password anggota
+    Route::put('/anggota/{id}/reset-password', [UserController::class, 'resetPassword'])->name('admin.anggota.resetPassword');
 });
 /*
 |--------------------------------------------------------------------------
@@ -256,3 +259,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-visits-history', [VisitController::class, 'history'])->name('visit.history');
 });
 
+Route::middleware(['auth'])->group(function () {
+
+    // Halaman profil
+    Route::get('/profile', [ProfileController::class, 'show'])
+        ->name('profile.show');
+
+    // Update profil
+    Route::put('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    // Hapus foto profil
+    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])
+        ->name('profile.photo.delete');
+
+});

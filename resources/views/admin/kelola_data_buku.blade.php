@@ -92,7 +92,7 @@
     data-penulis="Leila S. Chudori"
     data-kategori="Fiksi"
     data-deskripsi="Laut Bercerita adalah novel fiksi sejarah karya Leila S. Chudori yang sangat terinspirasi dari kisah nyata, mengangkat isu penculikan aktivis di masa Orde Baru."
-    data-gambar="{{ asset('img/buku.jpg') }}"
+    data-gambar="{{ asset('img/buku.png') }}"
 >
     <i class="fa-solid fa-eye"></i>
 </button>

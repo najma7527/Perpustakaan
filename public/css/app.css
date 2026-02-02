@@ -30,6 +30,54 @@
     z-index: 100;
 }
 
+.user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    font-weight: bold;
+}
+.user-role{
+    font-size: 12px;
+    align-self: flex-end;
+}
+
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-default {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #999;
+}
+.user:hover .avatar,
+.user:hover .avatar-default {
+    box-shadow: 0 0 0 3px rgba(33,150,243,0.2);
+}
+
 
 /* SIDEBAR */ 
 .sidebar { 
@@ -77,4 +125,113 @@
     background: #f5f7fa;
     min-height: 100vh;
     position: relative;
+}
+
+/* USER WRAPPER - POSITIONING */
+.user-wrapper {
+    position: relative;
+}
+
+.user-trigger {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* USER POPUP */
+.user-popup {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 260px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    z-index: 1000;
+}
+
+.user-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* HEADER POPUP → VERTIKAL & CENTER */
+.popup-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 16px;
+}
+
+.popup-header img,
+.popup-header .avatar-default {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+.popup-user-info {
+    text-align: center;
+}
+
+.popup-user-info strong {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+}
+
+.popup-user-info small {
+    font-size: 13px;
+    color: #666;
+}
+
+/* BUTTON */
+.btn-profile {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #2196f3;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.btn-profile i {
+    margin-right: 6px;
+}
+
+.btn-profile:hover {
+    background: #1976d2;
+}
+
+/* LOGOUT BUTTON */
+.btn-logout {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1.5px solid #f44336;
+    color: #f44336;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-logout i {
+    margin-right: 6px;
+}
+
+.btn-logout:hover {
+    background: #ffebee;
 }

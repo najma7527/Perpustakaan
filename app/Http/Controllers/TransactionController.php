@@ -20,15 +20,15 @@ class TransactionController extends Controller
 {
     $mode = $request->get('mode', 'peminjaman');
 
-    if (auth()->user()->role === 'admin') {
+    if (Auth::user()->role === 'admin') {
         $transactions = Transaction::with(['user','book'])->get();
     } else {
         $transactions = Transaction::with(['user','book'])
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->get();
     }
 
-    return view('admin.transaksi.transaksi', compact('transactions','mode'));
+    return view('admin.transaksi', compact('transactions','mode'));
 }
 
     public function create()

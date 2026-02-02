@@ -48,7 +48,7 @@
             </div>
 
             <button type="submit" class="btn-filter">
-                <i class="fa fa-filter"></i>
+                <i class="fa fa-sliders"></i>
             </button>
             <button class="btn-print">Cetak Laporan</button>
         </div>
