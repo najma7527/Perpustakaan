@@ -47,8 +47,15 @@ Route::get('/kelola_anggota-ditolak', function () {
 
 Route::get('/laporan_data_kehilangan', function () {
     return view('admin.laporan_data_kehilangan');
-});
+})->middleware('auth');
 
+Route::get('/transaksi', function () {
+    if (Auth::user()?->role === 'admin') {
+        abort(403);
+    }
+    return 'Halaman Transaksi Admin';
+    middleware('auth');
+});
 
 
 /*

@@ -20,11 +20,15 @@
         </div>
 
         <ul class="menu">
+            @auth
             <li><a href="/kelola_data_buku"><i class="fa fa-book"></i> Kelola Data Buku</a></li>
             <li><a href="/kelola_anggota"><i class="fa fa-users"></i> Kelola Anggota</a></li>
             <li><a href="/transaksi"><i class="fa fa-right-left"></i> Transaksi</a></li>
             <li><a href="/daftar_pengunjung"><i class="fa fa-list"></i> Daftar Pengunjung</a></li>
             <li><a href="/laporan_data_kehilangan"><i class="fa fa-file"></i> Laporan Kehilangan</a></li>
+            @endif
+            @endauth
+
         </ul>
     </aside>
 
@@ -34,11 +38,13 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <i class="fa fa-bars"></i>
+            @auth
             <div class="user">
-                <span>Seulgi</span>
-                <small>Admin</small>
+                <span>{{ auth::user()->name }}</span>
+                <small>{{ ucfirst(auth::user()->role) }}</small>
                 <img src="{{ asset('images/avatar.png') }}">
             </div>
+            @endauth
         </header>
 
              <!-- CONTENT -->
