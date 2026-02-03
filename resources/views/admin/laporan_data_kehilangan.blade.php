@@ -1,11 +1,46 @@
 @extends('layouts.app')
 
+@extends('layouts.app')
+
 @section('title', 'Laporan Kehilangan Buku')
+
 @push('styles')
-   <link rel="stylesheet" href="{{ asset('css/laporan_data_kehilangan.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">   
+<link rel="stylesheet" href="{{ asset('css/laporan_data_kehilangan.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 @endpush
+
 @section('content')
+<div class="container">
+    <h2>Laporan Kehilangan Buku</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Peminjam</th>
+                <th>Judul Buku</th>
+                <th>Tanggal Pinjam</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($transactions as $index => $transaksi)
+                @if ($transaksi->status === 'hilang')
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $transaksi->user->name }}</td>
+                    <td>{{ $transaksi->book->judul }}</td>
+                    <td>{{ $transaksi->tanggal_peminjaman }}</td>
+                    <td><span class="badge badge-danger">Hilang</span></td>
+                </tr>
+                @endif
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endsection
+
+
 <div class="header-card">
     <div class="header-left">
         <div class="header-icon">

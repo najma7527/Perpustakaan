@@ -10,7 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SiswaDashboardController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', fn () => redirect()->route('login.show'));
 
@@ -33,6 +33,31 @@ Route::get('/pengembalian-buku', function () {
 Route::get('/crud_kelola_buku', function () {
     return view('admin.CRUD_kelola_buku');
 });
+
+
+
+// VERIFIKASI ANGGOTA
+Route::get('/kelola_anggota-verifikasi', function () {
+    return view('admin.kelola_data_anggota-verifikasi');
+})->middleware('auth');
+
+Route::get('/kelola_anggota-ditolak', function () {
+    return view('admin.kelola_data_anggota-ditolak');
+})->middleware('auth');
+
+// LAPORAN KEHILANGAN
+Route::get('/laporan_data_kehilangan', function () {
+    return view('admin.laporan_data_kehilangan');
+})->middleware('auth');
+
+// TRANSAKSI (BUKAN ADMIN)
+Route::get('/transaksi', function () {
+    if (Auth::user()?->role === 'admin') {
+        abort(403);
+    }
+    return 'Halaman Transaksi';
+})->middleware('auth');
+
 // ANGGOTA
 Route::get('/dashboard-anggota', [SiswaDashboardController::class, 'index'])
     ->name('dashboard.anggota')
