@@ -10,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiswaDashboardController;
 
 Route::get('/', fn () => redirect()->route('login.show'));
 
@@ -33,9 +34,10 @@ Route::get('/crud_kelola_buku', function () {
     return view('admin.CRUD_kelola_buku');
 });
 // ANGGOTA
-Route::get('/dashboard-anggota', function () {
-    return view('siswa.dashboard');
-})->name('dashboard.anggota')->middleware('auth');
+Route::get('/dashboard-anggota', [SiswaDashboardController::class, 'index'])
+    ->name('dashboard.anggota')
+    ->middleware('auth');
+
 
 /*
 |--------------------------------------------------------------------------
