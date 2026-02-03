@@ -1,58 +1,50 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Laporan Kehilangan Buku</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
 
-    {{-- CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/laporan_data_kehilangan.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
+@extends('layouts.app')
 
-<div class="layout">
+@section('title', 'Laporan Kehilangan Buku')
 
-  <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="{{ asset('img/logo.png') }}">
-        </div>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/laporan_data_kehilangan.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+@endpush
 
-        <ul class="menu">
-            @auth
-            <li><a href="/kelola_data_buku"><i class="fa fa-book"></i> Kelola Data Buku</a></li>
-            <li><a href="/kelola_anggota"><i class="fa fa-users"></i> Kelola Anggota</a></li>
-            <li><a href="/transaksi"><i class="fa fa-right-left"></i> Transaksi</a></li>
-            <li><a href="/daftar_pengunjung"><i class="fa fa-list"></i> Daftar Pengunjung</a></li>
-            <li><a href="/laporan_data_kehilangan"><i class="fa fa-file"></i> Laporan Kehilangan</a></li>
-            @endif
-            @endauth
+@section('content')
+<div class="container">
+    <h2>Laporan Kehilangan Buku</h2>
 
-        </ul>
-    </aside>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Peminjam</th>
+                <th>Judul Buku</th>
+                <th>Tanggal Pinjam</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($transactions as $index => $transaksi)
+                @if ($transaksi->status === 'hilang')
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $transaksi->user->name }}</td>
+                    <td>{{ $transaksi->book->judul }}</td>
+                    <td>{{ $transaksi->tanggal_peminjaman }}</td>
+                    <td><span class="badge badge-danger">Hilang</span></td>
+                </tr>
+                @endif
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endsection
 
-    <!-- MAIN -->
-    <main class="main-content">
 
-        <!-- TOPBAR -->
-        <header class="topbar">
-            <i class="fa fa-bars"></i>
-            @auth
-            <div class="user">
-                <span>{{ auth::user()->name }}</span>
-                <small>{{ ucfirst(auth::user()->role) }}</small>
-                <img src="{{ asset('images/avatar.png') }}">
-            </div>
-            @endauth
-        </header>
-
-             <!-- CONTENT -->
-        <section class="content">
 <div class="header-card">
     <div class="header-left">
         <div class="header-icon">
-            <i class="fa fa-user-check"></i>
+            <i class="fa fa-file"></i>
         </div>
         <div class="header-text">
             <h3>Laporan Kehilangan Buku</h3>
@@ -126,6 +118,4 @@ document.getElementById('toggleSidebar').onclick = function () {
     document.querySelector('.sidebar').classList.toggle('active');
 };
 </script>
-
-</body>
-</html>
+@endsection

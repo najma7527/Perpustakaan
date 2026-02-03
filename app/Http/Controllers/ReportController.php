@@ -18,7 +18,7 @@ class ReportController extends Controller
     {
         if (Auth::user()?->role !== 'admin') abort(403);
         $reports = Report::with('transaction.user', 'transaction.book')->get();
-        return response()->json(['data' => $reports]);
+        return view('admin.laporan_data_kehilangan', compact('reports'));
     }
 
     public function create()

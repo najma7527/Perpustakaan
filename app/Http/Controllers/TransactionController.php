@@ -16,22 +16,16 @@ class TransactionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        if (Auth::user()->role !== 'admin') {
-            abort(403);
-        }
-
-        return view('laporan_data_kehilangan');
+    public function index(Request $request)
+{
+    if (Auth::user()->role !== 'admin') {
+        abort(403);
     }
 
-    public function create()
-    {
-        if (Auth::user()?->role !== 'admin') abort(403);
-        $users = User::where('role', 'anggota')->get();
-        return response()->json(['users' => $users]);
-    }
+    $transactions = Transaction::with(['user', 'book'])->get();
 
+    return view('admin.laporan_data_kehilangan', compact('transactions'));
+}
 
     public function pinjam($bukuId)
 {
@@ -114,7 +108,6 @@ class TransactionController extends Controller
         ->where('user_id', Auth::id())
         ->where('status', 'ditolak')
         ->firstOrFail();
-
         $transaksi->update([
             'status' => 'menunggu'
     ]);
@@ -159,7 +152,7 @@ class TransactionController extends Controller
 
         $data = $request->validate([
             'tanggal_peminjaman' => 'required|date',
-            'jatuh_tempo' => 'required|date|after:tanggal_peminjaman',
+            'tanggal_jatuh_tempo' => 'required|date|after:tanggal_peminjaman',
             'tanggal_pengembalian' => 'nullable|date|after_or_equal:tanggal_peminjaman',
 
         ]);
