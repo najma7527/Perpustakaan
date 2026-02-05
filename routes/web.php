@@ -16,9 +16,14 @@ Route::get('/', fn () => redirect()->route('login.show'));
 
 
 // ADMIN
-Route::get('/dashboard', function () {
+Route::get('/dashboard', action: function () {
+    if (Auth::user()?->role !== 'admin') {
+    abort(403);
+    }
+
     return view('admin.dashboard');
 })->name('dashboard.admin')->middleware('auth');
+
 
 Route::get('/pinjam-buku', function () {
     return view('siswa.pinjam-buku');
@@ -26,8 +31,12 @@ Route::get('/pinjam-buku', function () {
 
 
 Route::get('/pengembalian-buku', function () {
+    if (Auth::user()?->role !== 'anggota') {
+        abort(403);
+    }
+
     return view('siswa.pengembalian-buku');
-});
+})->name('anggota.pengembalian')->middleware('auth');
 
 
 Route::get('/crud_kelola_buku', function () {
@@ -38,10 +47,18 @@ Route::get('/crud_kelola_buku', function () {
 
 // VERIFIKASI ANGGOTA
 Route::get('/kelola_anggota-verifikasi', function () {
+    if (Auth::user()?->role !== 'admin') {
+        abort(403);
+    }
+
     return view('admin.kelola_data_anggota-verifikasi');
 })->middleware('auth');
 
 Route::get('/kelola_anggota-ditolak', function () {
+    if (Auth::user()?->role !== 'admin') {
+        abort(403);
+    }
+
     return view('admin.kelola_data_anggota-ditolak');
 })->middleware('auth');
 
@@ -55,13 +72,27 @@ Route::get('/transaksi', function () {
     if (Auth::user()?->role === 'admin') {
         abort(403);
     }
-    return 'Halaman Transaksi';
-})->middleware('auth');
+
+    return view('dashboard.transaksi');
+})->name('transaksi.user')->middleware('auth');
 
 // ANGGOTA
 Route::get('/dashboard-anggota', function () {
-    return view('siswa.dashboard');
+    if (Auth::user()?->role !== 'anggota') {
+        abort(403);
+    }
+
+    return view('dashboard.siswa');
 })->name('dashboard.anggota')->middleware('auth');
+
+Route::get('/kehilangan-buku', function () {
+    if (Auth::user()?->role !== 'anggota') {
+        abort(403);
+    }
+
+    return 'Halaman Kehilangan Buku (anggota)';
+})->middleware('auth');
+
 
 /*
 |--------------------------------------------------------------------------

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@extends('layouts.app')
-
 @section('title', 'Laporan Kehilangan Buku')
 
 @push('styles')
@@ -10,36 +8,6 @@
 @endpush
 
 @section('content')
-<div class="container">
-    <h2>Laporan Kehilangan Buku</h2>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Peminjam</th>
-                <th>Judul Buku</th>
-                <th>Tanggal Pinjam</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($transactions as $index => $transaksi)
-                @if ($transaksi->status === 'hilang')
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $transaksi->user->name }}</td>
-                    <td>{{ $transaksi->book->judul }}</td>
-                    <td>{{ $transaksi->tanggal_peminjaman }}</td>
-                    <td><span class="badge badge-danger">Hilang</span></td>
-                </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
-</div>
-@endsection
-
 
 <div class="header-card">
     <div class="header-left">
@@ -113,9 +81,11 @@
 </div>
 
 {{-- JS --}}
+@push('scripts')
 <script>
-document.getElementById('toggleSidebar').onclick = function () {
-    document.querySelector('.sidebar').classList.toggle('active');
-};
+document.getElementById('toggleSidebar')?.addEventListener('click', function () {
+    document.querySelector('.sidebar')?.classList.toggle('active');
+});
 </script>
+@endpush
 @endsection

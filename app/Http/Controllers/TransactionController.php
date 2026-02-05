@@ -24,7 +24,7 @@ class TransactionController extends Controller
 
     $transactions = Transaction::with(['user', 'book'])->get();
 
-    return view('admin.laporan_data_kehilangan', compact('transactions'));
+    return view('admin.transaksi', compact('transactions'));
 }
 
     public function pinjam($bukuId)
