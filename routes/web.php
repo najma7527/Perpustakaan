@@ -344,3 +344,28 @@ Route::middleware(['auth'])->group(function () {
         ->name('profile.photo.delete');
 
 });
+
+
+Route::get('/cetak-peminjaman', function () {
+    return view('cetak.cetak-peminjaman');
+});
+
+
+Route::get('/cetak-pengembalian', function () {
+    return view('cetak.cetak-pengembalian');
+});
+
+
+Route::get('/dashboard-siswa', function () {
+    return view('siswa.dashboard-siswa');
+});
+
+
+Route::get('/edit-profil-user', function () {
+    return view('siswa.edit-profil-user');
+});
+
+
+Route::get('/edit-foto-profil', function () {
+    return view('siswa.edit-foto-profil');
+});
