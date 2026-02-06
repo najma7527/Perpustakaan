@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Profil User</title>
-    <link rel="stylesheet" href="{{ asset('css/edit-profil-user.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/siswa/edit-profil-user.css') }}">
 </head>
 <body>
 

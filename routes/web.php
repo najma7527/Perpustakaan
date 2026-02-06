@@ -369,3 +369,8 @@ Route::get('/edit-profil-user', function () {
 Route::get('/edit-foto-profil', function () {
     return view('siswa.edit-foto-profil');
 });
+
+
+Route::get('/cetak-transaksi', function () {
+    return view('cetak.cetak-transaksi');
+});

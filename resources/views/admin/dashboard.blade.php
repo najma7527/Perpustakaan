@@ -4,8 +4,8 @@
 @section('title', 'Dashboard Admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/kelola-anggota-verifikasi.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/card.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/kelola-anggota-verifikasi.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/siswa/card.css') }}">
 @endpush
 
 @section('content')
