@@ -10,6 +10,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LaporanKehilanganController;
+use App\Http\Controllers\SiswaDashboardController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', fn () => redirect()->route('login.show'));
@@ -77,14 +79,9 @@ Route::get('/transaksi', function () {
 })->name('transaksi.user')->middleware('auth');
 
 // ANGGOTA
-Route::get('/dashboard-anggota', function () {
-    if (Auth::user()?->role !== 'anggota') {
-        abort(403);
-    }
-
-    return view('dashboard.siswa');
-})->name('dashboard.anggota')->middleware('auth');
-
+Route::get('/dashboard-anggota', [SiswaDashboardController::class, 'index'])
+    ->name('dashboard.anggota')
+    ->middleware('auth');
 Route::get('/kehilangan-buku', function () {
     if (Auth::user()?->role !== 'anggota') {
         abort(403);
@@ -92,6 +89,12 @@ Route::get('/kehilangan-buku', function () {
 
     return 'Halaman Kehilangan Buku (anggota)';
 })->middleware('auth');
+
+
+Route::get('/laporan_kehilangan', function () {
+    return view('siswa.laporan_kehilangan');
+});
+
 
 
 /*
@@ -111,6 +114,33 @@ Route::post('/register-admin', [AuthController::class, 'registerAdmin'])->name('
 Route::get('/succes', function () {
 return view('auth.succes_register');
 })->name('succes.register');
+
+/*
+|--------------------------------------------------------------------------
+| Routes SISWA
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard-siswa', [SiswaDashboardController::class, 'index'])
+        ->name('siswa.dashboard');
+
+    Route::get('/laporan-kehilangan', [LaporanKehilanganController::class, 'index'])
+        ->name('laporan-kehilangan.index');
+
+    Route::get('/laporan-kehilangan/create', [LaporanKehilanganController::class, 'create'])
+        ->name('laporan-kehilangan.create');
+
+    Route::post('/laporan-kehilangan', [LaporanKehilanganController::class, 'store'])
+        ->name('laporan-kehilangan.store');
+
+    Route::get('/laporan-kehilangan/{id}/edit', [LaporanKehilanganController::class, 'edit'])
+        ->name('laporan-kehilangan.edit');
+
+    Route::put('/laporan-kehilangan/{id}', [LaporanKehilanganController::class, 'update'])
+        ->name('laporan-kehilangan.update');
+});
+
 /*
 |--------------------------------------------------------------------------
 | User Management Routes (HANYA ADMIN)
