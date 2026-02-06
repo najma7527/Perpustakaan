@@ -24,7 +24,7 @@ class TransactionController extends Controller
 
     $transactions = Transaction::with(['user', 'book'])->get();
 
-    return view('admin.laporan_data_kehilangan', compact('transactions'));
+    return view('admin.transaksi', compact('transactions'));
 }
 
     public function pinjam($bukuId)
@@ -190,6 +190,27 @@ class TransactionController extends Controller
             ->get();
         return response()->json(['data' => $transactions]);
     }
+
+    public function perpanjang($id)
+{
+    $transaksi = Transaction::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->where('status', 'dipinjam')
+        ->firstOrFail();
+
+    // Cek kalau sudah lewat jatuh tempo
+    if (now()->greaterThan($transaksi->tanggal_jatuh_tempo)) {
+        return back()->with('error', 'Tidak bisa perpanjang, sudah melewati jatuh tempo');
+    }
+
+    // Tambah 3 hari
+    $transaksi->update([
+        'tanggal_jatuh_tempo' => \Carbon\Carbon::parse($transaksi->tanggal_jatuh_tempo)->addDays(3)
+    ]);
+
+    return back()->with('success', 'Perpanjangan berhasil 3 hari');
+}
+
 }
 
     
