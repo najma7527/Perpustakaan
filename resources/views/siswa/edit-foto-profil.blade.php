@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Foto Profile</title>
-    <link rel="stylesheet" href="{{ asset('css/edit-foto-profil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/siswa/edit-foto-profil.css') }}">
 </head>
 <body>
 

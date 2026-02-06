@@ -5,7 +5,7 @@
     <title>Pengembalian</title>
 
     {{-- CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/cetak-pengembalian.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cetak/cetak-pengembalian.css') }}">
 </head>
 
 <body onload="window.print()">

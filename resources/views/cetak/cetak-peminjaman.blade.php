@@ -5,7 +5,7 @@
     <title>Cetak Peminjaman Buku</title>
 
     {{-- CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/cetak-peminjaman.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cetak/cetak-peminjaman.css') }}">
 </head>
 <body>
 
