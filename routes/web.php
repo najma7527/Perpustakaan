@@ -10,15 +10,22 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LaporanKehilanganController;
+use App\Http\Controllers\SiswaDashboardController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', fn () => redirect()->route('login.show'));
 
 
 // ADMIN
-Route::get('/dashboard', function () {
+Route::get('/dashboard', action: function () {
+    if (Auth::user()?->role !== 'admin') {
+    abort(403);
+    }
+
     return view('admin.dashboard');
 })->name('dashboard.admin')->middleware('auth');
+
 
 Route::get('/pinjam-buku', function () {
     return view('siswa.pinjam-buku');
@@ -26,8 +33,12 @@ Route::get('/pinjam-buku', function () {
 
 
 Route::get('/pengembalian-buku', function () {
+    if (Auth::user()?->role !== 'anggota') {
+        abort(403);
+    }
+
     return view('siswa.pengembalian-buku');
-});
+})->name('anggota.pengembalian')->middleware('auth');
 
 
 Route::get('/crud_kelola_buku', function () {
@@ -38,10 +49,18 @@ Route::get('/crud_kelola_buku', function () {
 
 // VERIFIKASI ANGGOTA
 Route::get('/kelola_anggota-verifikasi', function () {
+    if (Auth::user()?->role !== 'admin') {
+        abort(403);
+    }
+
     return view('admin.kelola_data_anggota-verifikasi');
 })->middleware('auth');
 
 Route::get('/kelola_anggota-ditolak', function () {
+    if (Auth::user()?->role !== 'admin') {
+        abort(403);
+    }
+
     return view('admin.kelola_data_anggota-ditolak');
 })->middleware('auth');
 
@@ -55,13 +74,28 @@ Route::get('/transaksi', function () {
     if (Auth::user()?->role === 'admin') {
         abort(403);
     }
-    return 'Halaman Transaksi';
-})->middleware('auth');
+
+    return view('dashboard.transaksi');
+})->name('transaksi.user')->middleware('auth');
 
 // ANGGOTA
-Route::get('/dashboard-anggota', function () {
-    return view('siswa.dashboard');
-})->name('dashboard.anggota')->middleware('auth');
+Route::get('/dashboard-anggota', [SiswaDashboardController::class, 'index'])
+    ->name('dashboard.anggota')
+    ->middleware('auth');
+Route::get('/kehilangan-buku', function () {
+    if (Auth::user()?->role !== 'anggota') {
+        abort(403);
+    }
+
+    return 'Halaman Kehilangan Buku (anggota)';
+})->middleware('auth');
+
+
+Route::get('/laporan_kehilangan', function () {
+    return view('siswa.laporan_kehilangan');
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +114,33 @@ Route::post('/register-admin', [AuthController::class, 'registerAdmin'])->name('
 Route::get('/succes', function () {
 return view('auth.succes_register');
 })->name('succes.register');
+
+/*
+|--------------------------------------------------------------------------
+| Routes SISWA
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard-siswa', [SiswaDashboardController::class, 'index'])
+        ->name('siswa.dashboard');
+
+    Route::get('/laporan-kehilangan', [LaporanKehilanganController::class, 'index'])
+        ->name('laporan-kehilangan.index');
+
+    Route::get('/laporan-kehilangan/create', [LaporanKehilanganController::class, 'create'])
+        ->name('laporan-kehilangan.create');
+
+    Route::post('/laporan-kehilangan', [LaporanKehilanganController::class, 'store'])
+        ->name('laporan-kehilangan.store');
+
+    Route::get('/laporan-kehilangan/{id}/edit', [LaporanKehilanganController::class, 'edit'])
+        ->name('laporan-kehilangan.edit');
+
+    Route::put('/laporan-kehilangan/{id}', [LaporanKehilanganController::class, 'update'])
+        ->name('laporan-kehilangan.update');
+});
+
 /*
 |--------------------------------------------------------------------------
 | User Management Routes (HANYA ADMIN)
@@ -312,4 +373,34 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])
         ->name('profile.photo.delete');
 
+});
+
+
+Route::get('/cetak-peminjaman', function () {
+    return view('cetak.cetak-peminjaman');
+});
+
+
+Route::get('/cetak-pengembalian', function () {
+    return view('cetak.cetak-pengembalian');
+});
+
+
+Route::get('/dashboard-siswa', function () {
+    return view('siswa.dashboard-siswa');
+});
+
+
+Route::get('/edit-profil-user', function () {
+    return view('siswa.edit-profil-user');
+});
+
+
+Route::get('/edit-foto-profil', function () {
+    return view('siswa.edit-foto-profil');
+});
+
+
+Route::get('/cetak-transaksi', function () {
+    return view('cetak.cetak-transaksi');
 });
