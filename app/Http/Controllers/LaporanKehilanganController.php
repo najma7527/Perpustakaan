@@ -18,7 +18,7 @@ class LaporanKehilanganController extends Controller
             'keterangan' => 'required|string'
         ]);
 
-        LaporanKehilangan::create([
+    Report::create([
             'user_id' => auth()->id(),
             'book_id' => $request->book_id,
             'keterangan' => $request->keterangan,
@@ -32,7 +32,7 @@ class LaporanKehilanganController extends Controller
 
         public function index()
     {
-        $laporan = LaporanKehilangan::where('user_id', auth()->id())
+        $laporan = Report::where('user_id', auth()->id())
             ->latest()
             ->get();
 
@@ -41,7 +41,7 @@ class LaporanKehilanganController extends Controller
 
         public function edit($id)
     {
-        $laporan = LaporanKehilangan::where('id', $id)
+        $laporan = Report::where('id', $id)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
@@ -54,7 +54,7 @@ class LaporanKehilanganController extends Controller
             'keterangan' => 'required|string'
         ]);
 
-        $laporan = LaporanKehilangan::where('id', $id)
+        $laporan = Report::where('id', $id)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
