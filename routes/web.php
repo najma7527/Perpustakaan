@@ -63,6 +63,12 @@ Route::get('/dashboard-anggota', function () {
     return view('siswa.dashboard');
 })->name('dashboard.anggota')->middleware('auth');
 
+Route::get('/laporan_kehilangan', function () {
+    return view('siswa.laporan_kehilangan');
+});
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes
