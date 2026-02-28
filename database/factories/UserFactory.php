@@ -17,7 +17,6 @@ class UserFactory extends Factory
             'status' => fake()->randomElement(['aktif','nonaktif','menunggu','ditolak']),
             'password' => bcrypt('password'),
             'kelas' => fake()->randomElement(['XI RPL 1','XI RPL 2','XI RPL 3']),
-            'profile_photo' => 'default.jpg',
             'tanggal_pengajuan' => now(),
             'remember_token' => null,
             'created_at' => now(),

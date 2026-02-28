@@ -53,9 +53,8 @@
             <select name="filter" onchange="this.form.submit()">
                 <option value="">Semua transaksi</option>
                 <option value="pending" {{ request('filter') == 'pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
-                <option value="[belum_dikembalikan, buku_hilang]" {{ request('filter') == 'belum_dikembalikan' ? 'selected' : '' }}>Belum Dikembalikan</option>
-                <option value="sudah_dikembalikan" {{ request('filter') == 'sudah_dikembalikan' ? 'selected' : '' }}>Sudah Dikembalikan</option>
-                <option value="approved" {{ request('filter') == 'approved' ? 'selected' : '' }}>Disetujui</option>
+                <option value="belum_dikembalikan, buku_hilang" {{ request('filter') == 'belum_dikembalikan, buku_hilang' ? 'selected' : '' }}>Belum Dikembalikan</option>
+                <option value="sudah_dikembalikan, approved" {{ request('filter') == 'sudah_dikembalikan, approved' ? 'selected' : '' }}>Sudah Dikembalikan</option>
                 <option value="rejected" {{ request('filter') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
             </select>
         </div>
@@ -109,7 +108,7 @@
                 $statusClass = 'status-red';
                 break;
             case 'approved':
-                $status = 'Disetujui';
+                $status = 'Sudah Dikembalikan';
                 $statusClass = 'status-green';
                 break;
             case 'rejected':
@@ -163,7 +162,7 @@
                             <i class="fa fa-xmark"></i>
                         </button>
                     </form>
-                @elseif($report->status === 'sudah_dikembalikan')
+                @elseif($report->status === 'sudah_dikembalikan' || $report->status === 'approved')
 <span class="btn-filter btn-nota"
       onclick="window.open('{{ route('cetak.nota', [$report->id, 'hilang']) }}', '_blank')">
     <i class="fa-solid fa-print"></i>

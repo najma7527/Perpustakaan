@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ asset('css/admin/transaksi.css') }}">
 <link rel="stylesheet" href="{{ asset('css/admin/card.css') }}">
 @endpush
+
 @section('content')
 
 <!-- HEADER -->
@@ -29,7 +30,6 @@
            class="tab {{ ($mode ?? 'peminjaman') == 'peminjaman' ? 'active' : '' }}">
             Peminjaman
         </a>
-
         <a href="?mode=pengembalian"
            class="tab {{ ($mode ?? '') == 'pengembalian' ? 'active' : '' }}">
             Pengembalian
@@ -39,19 +39,32 @@
 
 <!-- FILTER -->
 <div class="filter">
-    <div class="search">
-        <i class="icon fa fa-search"></i>
-        <input type="text" placeholder="Cari Sesuatu...">
-    </div>
+    <form method="GET" style="display:flex; gap:10px; align-items:center;">
+        <input type="hidden" name="mode" value="{{ $mode }}">
+        <div class="search">
+            <i class="icon fa fa-search"></i>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari sesuatu...">
+        </div>
 
-    <div class="date">
-        <i class="icon fa fa-calendar"></i>
-        <input type="date">
-    </div>
+        <div class="date">
+            <i class="icon fa fa-calendar"></i>
+            <input type="date" name="date" value="{{ request('date') }}" onchange="this.form.submit()">
+        </div>
 
-    <button class="btn-filter">
-        <i class="fa fa-sliders"></i>
-    </button>
+        <button class="btn-filter" type="button" onclick="toggleFilterKategori()">
+            <i class="fa fa-sliders"></i>
+        </button>
+
+        <div id="filterKategori" style="display:none;" class="search">
+            <select name="filter[]" multiple onchange="this.form.submit()">
+                <option value="menunggu_konfirmasi" {{ in_array('menunggu_konfirmasi', (array)request('filter')) ? 'selected' : '' }}>Menunggu Konfirmasi</option>
+                <option value="belum_dikembalikan" {{ in_array('belum_dikembalikan', (array)request('filter')) ? 'selected' : '' }}>Belum Dikembalikan</option>
+                <option value="sudah_dikembalikan" {{ in_array('sudah_dikembalikan', (array)request('filter')) ? 'selected' : '' }}>Sudah Dikembalikan</option>
+                <option value="terlambat" {{ in_array('terlambat', (array)request('filter')) ? 'selected' : '' }}>Terlambat</option>
+                <option value="buku_hilang" {{ in_array('buku_hilang', (array)request('filter')) ? 'selected' : '' }}>Buku Hilang</option>
+            </select>
+        </div>
+    </form>
 
     @auth
     <a href="{{ route('cetak.filter-transaksi') }}" class="btn-print">
@@ -63,7 +76,6 @@
 
 {{-- ================= PEMINJAMAN ================= --}}
 @if(($mode ?? 'peminjaman') == 'peminjaman')
-
 <div class="table-wrapper">
 <table>
 <thead>
@@ -89,24 +101,23 @@
     <td>{{ optional($trx->tanggal_peminjaman)->format('d/m/Y') }}</td>
     <td>{{ optional($trx->tanggal_jatuh_tempo)->format('d/m/Y') }}</td>
     <td>
-    @if($trx->status == 'belum_dikembalikan')
-        <span class="status blue">Belum Dikembalikan</span>
-    @elseif($trx->status == 'buku_hilang')
-        <span class="status danger">Buku Hilang</span>
-    @elseif($trx->status == 'terlambat')
-        <span class="status warning">Terlambat</span>
-    @endif
+        @if($trx->status == 'belum_dikembalikan')
+            <span class="status blue">Belum Dikembalikan</span>
+        @elseif($trx->status == 'buku_hilang')
+            <span class="status danger">Buku Hilang</span>
+        @elseif($trx->status == 'terlambat')
+            <span class="status warning">Terlambat</span>
+        @endif
     </td>
-<td class="aksi">
-@if($trx->status == 'belum_dikembalikan')
-<span class="btn-filter btn-nota"
-      onclick="window.open('{{ route('cetak.nota', [$trx->id, 'peminjaman']) }}', '_blank')">
-    <i class="fa-solid fa-print"></i>
-</span>
-@elseif(in_array($trx->status, ['terlambat', 'buku_hilang']))
-    <span>-</span>
-@endif
-</td>
+    <td class="aksi">
+        @if($trx->status == 'belum_dikembalikan')
+            <span class="btn-filter btn-nota" onclick="window.open('{{ route('cetak.nota', [$trx->id, 'peminjaman']) }}','_blank')">
+                <i class="fa-solid fa-print"></i>
+            </span>
+        @else
+            <span>-</span>
+        @endif
+    </td>
 </tr>
 @empty
 <tr>
@@ -114,20 +125,20 @@
 </tr>
 @endforelse
 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="8">
-                            @include('components.pagination', ['paginator' => $transactions])
-                        </td>
-                    </tr>
-                </tfoot>
+
+<tfoot>
+<tr>
+    <td colspan="8">
+        @include('components.pagination', ['paginator' => $transactions])
+    </td>
+</tr>
+</tfoot>
 </table>
 </div>
 @endif
 
 {{-- ================= PENGEMBALIAN ================= --}}
 @if(($mode ?? '') == 'pengembalian')
-
 <div class="table-wrapper">
 <table>
 <thead>
@@ -159,24 +170,24 @@
         @endif
     </td>
     <td>{{ $trx->tanggal_pengembalian ? $trx->tanggal_pengembalian->format('d/m/Y') : '-' }}</td>
-    <td class="aksi" style="display: flex; gap: 5px; justify-content: center;">
-@if($trx->status == 'menunggu_konfirmasi')
-    <form action="{{ route('transactions.terimaPengembalian', $trx->id) }}" method="POST" onsubmit="return confirm('Terima pengembalian buku ini?')">
-        @csrf
-        @method('PUT')
-        <button type="submit" class="btn-green" title="Terima" style="border:none; border-radius:4px; padding: 2px 8px; cursor:pointer;">✔</button>
-    </form>
-    <form action="{{ route('transactions.tolakPengembalian', $trx->id) }}" method="POST" onsubmit="return confirm('Tolak pengembalian buku ini?')">
-        @csrf
-        @method('PUT')
-        <button type="submit" class="btn-red" title="Tolak" style="border:none; border-radius:4px; padding: 2px 8px; cursor:pointer;">✖</button>
-    </form>
-@elseif($trx->status == 'sudah_dikembalikan')
-<span class="btn-filter btn-nota"
-      onclick="window.open('{{ route('cetak.nota', [$trx->id, 'pengembalian']) }}', '_blank')">
-    <i class="fa-solid fa-print"></i>
-</span>@endif
-</td>
+    <td class="aksi" style="display:flex; gap:5px; justify-content:center;">
+        @if($trx->status == 'menunggu_konfirmasi')
+        <form action="{{ route('transactions.terimaPengembalian', $trx->id) }}" method="POST" onsubmit="return confirm('Terima pengembalian buku ini?')">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn-green">✔</button>
+        </form>
+        <form action="{{ route('transactions.tolakPengembalian', $trx->id) }}" method="POST" onsubmit="return confirm('Tolak pengembalian buku ini?')">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn-red">✖</button>
+        </form>
+        @elseif($trx->status == 'sudah_dikembalikan')
+        <span class="btn-filter btn-nota" onclick="window.open('{{ route('cetak.nota', [$trx->id, 'pengembalian']) }}','_blank')">
+            <i class="fa-solid fa-print"></i>
+        </span>
+        @endif
+    </td>
 </tr>
 @empty
 <tr>
@@ -184,15 +195,27 @@
 </tr>
 @endforelse
 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="8">
-                            @include('components.pagination', ['paginator' => $transactions])
-                        </td>
-                    </tr>
-                </tfoot>
+
+<tfoot>
+<tr>
+    <td colspan="8">
+        @include('components.pagination', ['paginator' => $transactions])
+    </td>
+</tr>
+</tfoot>
 </table>
 </div>
 @endif
-@endsection
 
+<script>
+function toggleFilterKategori(){
+    let el = document.getElementById("filterKategori");
+    if(el.style.display === "none" || el.style.display === ""){
+        el.style.display = "block";
+    } else {
+        el.style.display = "none";
+    }
+}
+</script>
+
+@endsection

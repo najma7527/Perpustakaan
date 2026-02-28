@@ -22,52 +22,40 @@ class TransactionController extends Controller
      * Display a listing of transactions (Admin only)
      */
     public function index(Request $request)
-    {
-        if (Auth::user()?->role !== 'admin') {
-            abort(403);
-        }
+{
+    $mode = $request->mode ?? 'peminjaman'; // default peminjaman
 
-        if ($request->filled('search')) {
-            $search = $request->search;
+    $query = \App\Models\Transaction::with(['user','book']);
 
-            $transactions = Transaction::whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                  ->orWhere('kelas', 'like', "%$search%");
-            })
-            ->orWhereHas('book', function ($q) use ($search) {
-                $q->where('judul', 'like', "%$search%");
-            })
-            ->with(['user', 'book'])
-            ->latest()
-            ->paginate(10);
-
-            return view('admin.transaksi', compact('transactions'));
-        }
-
-        if ($request->filled('filter')) {
-            $filter = $request->filter;
-
-            $transactions = Transaction::where('status', $filter)
-                ->with(['user', 'book'])
-                ->latest()
-                ->paginate(10);
-            return view('admin.transaksi', compact('transactions'));
-        }
-
-        $mode = $request->get('mode', 'peminjaman');
-
-        $transactions = Transaction::with(['user', 'book'])
-            ->when($mode === 'peminjaman', function($q) {
-                $q->whereIn('status', ['buku_hilang', 'belum_dikembalikan', 'terlambat']);
-            })
-            ->when($mode === 'pengembalian', function($q) {
-                $q->whereIn('status', ['menunggu_konfirmasi', 'sudah_dikembalikan']);
-            })
-            ->latest()
-            ->paginate(10);
-
-        return view('admin.transaksi', compact('transactions', 'mode'));
+    // Filter status
+    if ($request->filled('filter')) {
+        $query->whereIn('status', (array)$request->filter);
     }
+
+    // Search
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search){
+            $q->whereHas('user', fn($qq) => $qq->where('name','like',"%$search%")
+                                                ->orWhere('kelas','like',"%$search%"))
+              ->orWhereHas('book', fn($qq) => $qq->where('judul','like',"%$search%"));
+        });
+    }
+
+    // Filter tanggal (tanggal pinjam)
+    if ($request->filled('date')) {
+        $query->whereDate('tanggal_peminjaman', $request->date);
+    }
+
+    // Mode: pengembalian → tampil yang ada tanggal_pengembalian
+    if ($mode == 'pengembalian') {
+        $query->whereNotNull('tanggal_pengembalian');
+    }
+
+    $transactions = $query->latest()->paginate(10)->withQueryString();
+
+    return view('admin.transaksi', compact('transactions','mode'));
+}
 
     /**
      * Create form for new transaction (optional - can use browse instead)
@@ -128,11 +116,15 @@ class TransactionController extends Controller
         // Ubah status buku menjadi dipinjam
         $buku->update(['status' => 'dipinjam']);
         // Update visit jika ada
-    if ($visit) {
-        $visit->update([
-            'd' => $transaction->id
-        ]);
-    }
+    $visitToday = Visit::where('user_id', Auth::id())
+    ->whereDate('tanggal_datang', today())
+    ->first();
+
+if ($visitToday) {
+    $visitToday->update([
+        'transactions_id' => $transaction->id
+    ]);
+}
 
         return back()
         ->with('success', 'Buku "' . $buku->judul . '" berhasil dipinjam!')
@@ -154,6 +146,15 @@ class TransactionController extends Controller
             'tanggal_pengembalian' => now(),
             'jenis_transaksi' => 'dikembalikan',
         ]);
+        $visitToday = Visit::where('user_id', Auth::id())
+    ->whereDate('tanggal_datang', today())
+    ->first();
+
+if ($visitToday) {
+    $visitToday->update([
+        'transactions_id' => $transaction->id
+    ]);
+}
 
         return back()->with('success', 'Pengajuan pengembalian berhasil, menunggu persetujuan admin');
     }
@@ -227,6 +228,15 @@ class TransactionController extends Controller
         $transaksi->update([
             'status' => 'menunggu_konfirmasi'
         ]);
+        $visitToday = Visit::where('user_id', Auth::id())
+            ->whereDate('tanggal_datang', today())
+            ->first();
+
+        if ($visitToday) {
+            $visitToday->update([
+                'transactions_id' => $transaksi->id
+            ]);
+        }
 
         return back()->with('success', 'Pengajuan pengembalian ulang berhasil');
     }
@@ -251,6 +261,15 @@ class TransactionController extends Controller
             'status' => 'buku_hilang',
             'tanggal_pengembalian' => now(),
         ]);
+
+            $visitToday = Visit::where('user_id', Auth::id())
+                ->whereDate('tanggal_datang', today())
+                ->first();
+        if ($visitToday) {
+            $visitToday->update([
+                'transactions_id' => $transaksi->id
+            ]);
+        }
 
         // Tetap tandai buku sebagai tersedia untuk bisa dipinjam lagi
         $transaksi->book->update(['status' => 'tersedia']);

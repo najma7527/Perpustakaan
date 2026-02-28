@@ -13,16 +13,33 @@
     <div class="profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; align-items: start;">
         <!-- Kartu kiri: foto & nama -->
         <div class="card" style="text-align: center; padding: 2rem;">
-            <div class="avatar1" onclick="openModal()" style="position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; cursor: pointer;">
-                <img src="{{ auth()->user()->profile_photo ? asset('storage/'.auth()->user()->profile_photo) : asset('img/avatar.png') }}" 
-                     alt="Avatar1" style="width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid #1e88e5;">
-                <span class="edit-icon" style="position:absolute; bottom:5px; right:5px; background:#1e88e5; color:white; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid white;">
-                    <i class="fa fa-pen"></i>
-                </span>
+    <div class="avatar1" onclick="openModal()" 
+         style="position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; cursor: pointer;">
+
+        @if(auth()->user()->profile_photo)
+            <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}"
+                 alt="Avatar"
+                 style="width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid #1e88e5;">
+        @else
+            <div style="width:100%; height:100%; border-radius:50%; border:4px solid #1e88e5; 
+                        background:#e3f2fd; display:flex; align-items:center; justify-content:center;">
+                <i class="fa fa-user" style="font-size:40px; color:#1e88e5;"></i>
             </div>
-            <h3>{{ auth()->user()->name }}</h3>
-            <span class="role" style="display:inline-block; background:#e3f2fd; color:#1e88e5; font-weight:600; padding:0.3rem 1rem; border-radius:20px;">{{ ucfirst(auth()->user()->role) }}</span>
-        </div>
+        @endif
+
+        <span class="edit-icon"
+              style="position:absolute; bottom:5px; right:5px; background:#1e88e5; color:white; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid white;">
+            <i class="fa fa-pen"></i>
+        </span>
+
+    </div>
+
+    <h3>{{ auth()->user()->name }}</h3>
+    <span class="role"
+          style="display:inline-block; background:#e3f2fd; color:#1e88e5; font-weight:600; padding:0.3rem 1rem; border-radius:20px;">
+        {{ ucfirst(auth()->user()->role) }}
+    </span>
+</div>
 
         <!-- Kartu kanan: data diri -->
         <div class="card" style="position:relative; padding:1.5rem;">
@@ -73,7 +90,20 @@
             <tbody>
                 @forelse($riwayat as $item)
                 <tr style="border-bottom:1px solid #e9ecef;">
-                    <td style="padding:0.75rem 1rem;">{{ $item->transaction->jenis_transaksi ?? '-' }}</td>
+                    <td style="padding:0.75rem 1rem;">
+                        @php
+                            $jenis = $item->transaction->status ?? null;
+
+                            $mapping = [
+                                'belum_dikembalikan' => 'Peminjaman Buku',
+                                'menunggu_konfirmasi' => 'Pengembalian Buku',
+                                'buku_hilang' => 'Buku Hilang',
+                                'dikembalikan' => 'Pengembalian Selesai',
+                            ];
+                        @endphp
+
+                        {{ $mapping[$jenis] ?? 'tidak ada  transaksi' }}
+                    </td>
                     <td style="padding:0.75rem 1rem;">{{ $item->transaction->book->judul ?? '-' }}</td>
                     <td style="padding:0.75rem 1rem;">{{ \Carbon\Carbon::parse($item->tanggal_datang)->format('d M Y') }}</td>
                 </tr>

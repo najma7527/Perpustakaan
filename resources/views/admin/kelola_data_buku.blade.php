@@ -37,7 +37,7 @@
         <i class="fa fa-calendar"></i>
         <select name="date" class="date" onchange="this.form.submit()">
         <option value="">Semua Tahun</option>
-        @for($year = date('Y'); $year >= 2000; $year--)
+        @for($year = date('Y'); $year >= 1900; $year--)
             <option value="{{ $year }}" {{ request('date') == $year ? 'selected' : '' }}>
                 {{ $year }}
             </option>
