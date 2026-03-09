@@ -31,4 +31,10 @@ return new class extends Migration
     {
         Schema::dropIfExists('transactions');
     }
+
+    /*due_date (date)
+    status (enum: dipinjam, kembali, terlambat)
+    notifikasi (boolean) // true kalau sudah dikirim*/
+
+
 };
