@@ -10,6 +10,7 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Symfony\Component\Clock\now;
 
 class AdminDashboardController extends Controller
 {
@@ -33,11 +34,7 @@ class AdminDashboardController extends Controller
         $totalVisit = Visit::count();
 
         //Total Buku Hilang
-        $totalLostBooks = Report::where('status', ['belum_dikembalikan', 'pending', 'rejected'])->count();
-
-        // Total keterlambatan
-        $totalTerlambat = Transaction::where('status', 'terlambat')->count();
-
+        $totalLostBooks = Report::where('status', 'buku_hilang')->count();
 
 
         // =====================
@@ -59,16 +56,14 @@ class AdminDashboardController extends Controller
         // KIRIM KE VIEW
         // =====================
 
-       return view('admin.dashboard_admin', compact(
-            'totalBook',
-            'totalBorrow',
-            'totalReturn',
-            'totalVisit',
-            'totalLostBooks',
-            'totalTerlambat',
-            'todayVisit',
-            'latestReport'
-        ));
-
+        return view('admin.dashboard_admin', compact(
+        'totalBook',
+        'totalBorrow',
+        'totalReturn',
+        'totalVisit',
+        'totalLostBooks',
+        'todayVisit',
+        'latestReport'
+    ));
     }     
 }
